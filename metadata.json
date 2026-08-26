@@ -1,0 +1,6 @@
+{
+  "name": "Santtêo - Distribuição e Fornecimento de Chopp",
+  "description": "Central de pedidos, catálogo de barris e atendimento no WhatsApp da Santtêo Distribuição e Fornecimento de Chopp.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
