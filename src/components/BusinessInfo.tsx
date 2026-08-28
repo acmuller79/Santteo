@@ -126,11 +126,11 @@ export const BusinessInfo: React.FC<BusinessInfoProps> = ({
         </div>
 
         <div className="space-y-2">
-          {FREQUENT_QUESTIONS.map((item, idx) => {
+          {(config.faqs && config.faqs.length > 0 ? config.faqs : FREQUENT_QUESTIONS).map((item, idx) => {
             const isOpen = openFaq === idx;
             return (
               <div
-                key={idx}
+                key={item.id || idx}
                 className="border border-stone-800 rounded-2xl bg-stone-950/50 overflow-hidden transition-colors"
               >
                 <button

@@ -1,5 +1,60 @@
-import { BeerProduct, DistributorConfig, QuickAction } from '../types';
+import { BeerProduct, DistributorConfig, QuickAction, TrustBadge, FAQItem } from '../types';
 import santteoLogo from '../assets/images/santteo_badge_1787785971094.jpg';
+
+export const DEFAULT_TRUST_BADGES: TrustBadge[] = [
+  {
+    id: 'badge-1',
+    title: 'Entrega Pontual',
+    subtitle: 'Na hora do seu evento',
+    icon: 'Truck'
+  },
+  {
+    id: 'badge-2',
+    title: 'Chopp Sempre Gelado',
+    subtitle: 'Direto da câmara fria',
+    icon: 'Beer'
+  },
+  {
+    id: 'badge-3',
+    title: 'Chopeiras Testadas',
+    subtitle: 'Higienizadas a cada uso',
+    icon: 'ShieldCheck'
+  },
+  {
+    id: 'badge-4',
+    title: 'Plantão WhatsApp',
+    subtitle: 'Suporte no evento',
+    icon: 'MessageCircle'
+  }
+];
+
+export const DEFAULT_FAQS: FAQItem[] = [
+  {
+    id: 'faq-1',
+    question: 'A chopeira acompanha o barril?',
+    answer: 'Sim! Em pedidos de barris de 30L ou 50L emprestamos a chopeira (elétrica ou a gelo) com cilindro de CO2 e kit completo já regulado e instalado na sua festa sem custo adicional para a maioria das regiões.'
+  },
+  {
+    id: 'faq-2',
+    question: 'Vocês entregam e instalam no local?',
+    answer: 'Entregamos pontualmente no local da sua festa, fazemos toda a instalação da chopeira, deixamos o chopp na temperatura ideal e ensinamos a tirar o chopp perfeito.'
+  },
+  {
+    id: 'faq-3',
+    question: 'Quanto tempo antes devo fazer o pedido?',
+    answer: 'Recomendamos reservar com pelo menos 2 a 4 dias de antecedência para garantir a disponibilidade de chopeiras elétricas no final de semana. Para pedidos de emergência no mesmo dia, consulte disponibilidade via WhatsApp!'
+  },
+  {
+    id: 'faq-4',
+    question: 'Quais são as formas de pagamento?',
+    answer: 'Aceitamos PIX (com desconto especial), Cartões de Crédito (com opção de parcelamento) e Cartão de Débito no ato da entrega.'
+  },
+  {
+    id: 'faq-5',
+    question: 'Vocês recolhem a chopeira depois do evento?',
+    answer: 'Sim! Agendamos o recolhimento no dia seguinte ou na segunda-feira sem que você precise se preocupar com nada.'
+  }
+];
 
 export const DEFAULT_CONFIG: DistributorConfig = {
   name: 'Santtêo',
@@ -8,6 +63,8 @@ export const DEFAULT_CONFIG: DistributorConfig = {
   logoUrl: santteoLogo,
   primaryPhone: '5511999998888',
   supportPhone: '5511988887777',
+  whatsappWelcomeMessage: 'Olá! Gostaria de fazer um pedido ou tirar dúvidas sobre o chopp Santtêo.',
+  supportWelcomeMessage: 'Olá! Preciso de suporte técnico sobre a chopeira ou instalação do barril no meu evento.',
   instagramUser: 'santteochopp',
   address: 'Av. das Cervejarias, 1500 - Galpão 04',
   cityState: 'São Paulo - SP',
@@ -19,6 +76,15 @@ export const DEFAULT_CONFIG: DistributorConfig = {
   deliveryZones: ['Zona Central', 'Zona Sul', 'Zona Norte', 'Zona Oeste', 'Região Metropolitana'],
   bannerBadge: '⚡ Plantão de Chopp Santtêo • Atendimento Rápido no WhatsApp',
   freeChopeiraOnKegs: true,
+  promoBanner: {
+    enabled: true,
+    title: 'Chopeira Elétrica Grátis nos Barris de 30L e 50L',
+    subtitle: 'Levamos o kit completo regulado com CO2 e instalação no local da sua festa!',
+    buttonText: 'Aproveitar Promoção',
+    targetBeerId: 'pilsen-puro-malte'
+  },
+  trustBadges: DEFAULT_TRUST_BADGES,
+  faqs: DEFAULT_FAQS
 };
 
 export const DEFAULT_BEERS: BeerProduct[] = [
@@ -32,7 +98,8 @@ export const DEFAULT_BEERS: BeerProduct[] = [
     ibu: 12,
     colorHex: '#E5A93C',
     badge: 'Campeão de Vendas',
-    availableSizes: ['30L', '50L', 'Growler'],
+    availableSizes: ['20L', '30L', '50L', 'Growler'],
+    price20L: 280,
     price30L: 380,
     price50L: 590,
     priceGrowler: 25,
@@ -49,7 +116,8 @@ export const DEFAULT_BEERS: BeerProduct[] = [
     ibu: 48,
     colorHex: '#C67A1D',
     badge: 'Para Apaixonados por Lúpulo',
-    availableSizes: ['30L', '50L', 'Growler'],
+    availableSizes: ['20L', '30L', '50L', 'Growler'],
+    price20L: 350,
     price30L: 490,
     price50L: 750,
     priceGrowler: 35,
@@ -66,7 +134,8 @@ export const DEFAULT_BEERS: BeerProduct[] = [
     ibu: 8,
     colorHex: '#72173C',
     badge: 'Sucesso Feminino & Festas',
-    availableSizes: ['30L', '50L', 'Growler'],
+    availableSizes: ['20L', '30L', '50L', 'Growler'],
+    price20L: 310,
     price30L: 420,
     price50L: 660,
     priceGrowler: 30,
@@ -83,7 +152,8 @@ export const DEFAULT_BEERS: BeerProduct[] = [
     ibu: 14,
     colorHex: '#DDA83A',
     badge: 'Super Refrescante',
-    availableSizes: ['30L', '50L', 'Growler'],
+    availableSizes: ['20L', '30L', '50L', 'Growler'],
+    price20L: 320,
     price30L: 440,
     price50L: 680,
     priceGrowler: 28,
@@ -100,7 +170,8 @@ export const DEFAULT_BEERS: BeerProduct[] = [
     ibu: 16,
     colorHex: '#2B1A13',
     badge: 'Saboroso e Encorpado',
-    availableSizes: ['30L', '50L', 'Growler'],
+    availableSizes: ['20L', '30L', '50L', 'Growler'],
+    price20L: 300,
     price30L: 410,
     price50L: 640,
     priceGrowler: 28,
@@ -117,7 +188,8 @@ export const DEFAULT_BEERS: BeerProduct[] = [
     ibu: 26,
     colorHex: '#D8942B',
     badge: 'Ideal para Churrasco',
-    availableSizes: ['30L', '50L', 'Growler'],
+    availableSizes: ['20L', '30L', '50L', 'Growler'],
+    price20L: 330,
     price30L: 450,
     price50L: 700,
     priceGrowler: 32,
@@ -135,6 +207,7 @@ export const QUICK_ACTIONS: QuickAction[] = [
     type: 'whatsapp',
     whatsappMessage: 'Olá! Gostaria de falar com um atendente para tirar dúvidas e fazer um orçamento de chopp.',
     highlight: true,
+    enabled: true,
     colorScheme: 'green',
   },
   {
@@ -144,6 +217,7 @@ export const QUICK_ACTIONS: QuickAction[] = [
     icon: 'Beer',
     type: 'order',
     highlight: true,
+    enabled: true,
     colorScheme: 'amber',
   },
   {
@@ -152,6 +226,7 @@ export const QUICK_ACTIONS: QuickAction[] = [
     subtitle: 'Calcule a quantidade exata de litros para seus convidados',
     icon: 'Calculator',
     type: 'calculator',
+    enabled: true,
     colorScheme: 'blue',
   },
   {
@@ -160,6 +235,7 @@ export const QUICK_ACTIONS: QuickAction[] = [
     subtitle: 'Preços, estilos artesanais, IBU, ABV e barris disponíveis',
     icon: 'BookOpen',
     type: 'catalog',
+    enabled: true,
     colorScheme: 'amber',
   },
   {
@@ -168,6 +244,7 @@ export const QUICK_ACTIONS: QuickAction[] = [
     subtitle: 'Fotos de eventos, vídeos das chopeiras e novidades',
     icon: 'Instagram',
     type: 'instagram',
+    enabled: true,
     colorScheme: 'purple',
   },
   {
@@ -176,6 +253,7 @@ export const QUICK_ACTIONS: QuickAction[] = [
     subtitle: 'Veja no mapa para retirada ou verificar raio de entrega',
     icon: 'MapPin',
     type: 'maps',
+    enabled: true,
     colorScheme: 'slate',
   },
   {
@@ -185,6 +263,7 @@ export const QUICK_ACTIONS: QuickAction[] = [
     icon: 'Wrench',
     type: 'whatsapp',
     whatsappMessage: 'Olá! Preciso de suporte técnico sobre a chopeira ou instalação do barril durante meu evento.',
+    enabled: true,
     colorScheme: 'slate',
   },
   {
@@ -193,29 +272,10 @@ export const QUICK_ACTIONS: QuickAction[] = [
     subtitle: 'Copiar chave PIX rápida e consultar parcelamento',
     icon: 'CreditCard',
     type: 'pix',
+    enabled: true,
     colorScheme: 'green',
   }
 ];
 
-export const FREQUENT_QUESTIONS = [
-  {
-    question: 'A chopeira acompanha o barril?',
-    answer: 'Sim! Em pedidos de barris de 30L ou 50L emprestamos a chopeira (elétrica ou a gelo) com cilindro de CO2 e kit completo já regulado e instalado na sua festa sem custo adicional para a maioria das regiões.'
-  },
-  {
-    question: 'Vocês entregam e instalam no local?',
-    answer: 'Entregamos pontualmente no local da sua festa, fazemos toda a instalação da chopeira, deixamos o chopp na temperatura ideal e ensinamos a tirar o chopp perfeito.'
-  },
-  {
-    question: 'Quanto tempo antes devo fazer o pedido?',
-    answer: 'Recomendamos reservar com pelo menos 2 a 4 dias de antecedência para garantir a disponibilidade de chopeiras elétricas no final de semana. Para pedidos de emergência no mesmo dia, consulte disponibilidade via WhatsApp!'
-  },
-  {
-    question: 'Quais são as formas de pagamento?',
-    answer: 'Aceitamos PIX (com desconto especial), Cartões de Crédito (com opção de parcelamento) e Cartão de Débito no ato da entrega.'
-  },
-  {
-    question: 'Vocês recolhem a chopeira depois do evento?',
-    answer: 'Sim! Agendamos o recolhimento no dia seguinte ou na segunda-feira sem que você precise se preocupar com nada.'
-  }
-];
+export const FREQUENT_QUESTIONS = DEFAULT_FAQS;
+

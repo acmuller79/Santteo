@@ -60,14 +60,16 @@ export const OrderSimulator: React.FC<OrderSimulatorProps> = ({
 
   // Calculate estimated price
   let basePrice = 0;
-  if (order.kegSize === '30L') {
+  if (order.kegSize === '20L') {
+    basePrice = selectedBeer?.price20L || 280;
+  } else if (order.kegSize === '30L') {
     basePrice = selectedBeer?.price30L || 380;
   } else if (order.kegSize === '50L') {
     basePrice = selectedBeer?.price50L || 590;
   } else if (order.kegSize === 'Growler') {
     basePrice = (selectedBeer?.priceGrowler || 25) * 2; // 2L growler default
   } else {
-    basePrice = 280; // 20L
+    basePrice = selectedBeer?.price30L || 380;
   }
 
   let totalEstimate = basePrice * order.quantity;
@@ -161,10 +163,11 @@ export const OrderSimulator: React.FC<OrderSimulatorProps> = ({
               <label className="block text-xs font-bold uppercase tracking-wider text-amber-400 mb-2">
                 2. Tamanho do Barril / Embalagem
               </label>
-              <div className="grid grid-cols-3 gap-2">
-                {(['30L', '50L', 'Growler'] as const).map((size) => {
+              <div className="grid grid-cols-4 gap-1.5">
+                {((selectedBeer.availableSizes && selectedBeer.availableSizes.length > 0 ? selectedBeer.availableSizes : ['20L', '30L', '50L', 'Growler']) as ('20L' | '30L' | '50L' | 'Growler')[]).map((size) => {
                   const isSelected = order.kegSize === size;
                   let price = 0;
+                  if (size === '20L') price = selectedBeer.price20L || 280;
                   if (size === '30L') price = selectedBeer.price30L || 380;
                   if (size === '50L') price = selectedBeer.price50L || 590;
                   if (size === 'Growler') price = (selectedBeer.priceGrowler || 25) * 2;
@@ -174,14 +177,14 @@ export const OrderSimulator: React.FC<OrderSimulatorProps> = ({
                       key={size}
                       type="button"
                       onClick={() => setOrder({ ...order, kegSize: size })}
-                      className={`p-3 rounded-2xl border text-center transition-all ${
+                      className={`p-2.5 rounded-2xl border text-center transition-all ${
                         isSelected
                           ? 'bg-amber-500/20 border-amber-500 text-white font-bold ring-1 ring-amber-500'
                           : 'bg-stone-950/60 border-stone-800 hover:border-stone-700 text-stone-400'
                       }`}
                     >
-                      <div className="text-base font-black text-amber-300">{size}</div>
-                      <div className="text-[11px] text-stone-400 mt-1">{formatCurrency(price)}</div>
+                      <div className="text-sm font-black text-amber-300">{size}</div>
+                      <div className="text-[10px] text-stone-400 mt-0.5">{formatCurrency(price)}</div>
                     </button>
                   );
                 })}

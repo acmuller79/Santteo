@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Beer, Sparkles, Droplets, Thermometer, Utensils, Send, Check } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+import { Beer, Sparkles, Droplets, Thermometer, Utensils, Send, Edit, Plus, Check, Settings2 } from 'lucide-react';
 import { BeerProduct, DistributorConfig } from '../types';
 import { formatCurrency, openWhatsApp } from '../utils/whatsapp';
 
@@ -7,23 +7,35 @@ interface BeerMenuProps {
   beers: BeerProduct[];
   config: DistributorConfig;
   onSelectBeerForOrder: (beerId: string) => void;
+  onEditBeer?: (beer: BeerProduct) => void;
+  onAddNewBeer?: () => void;
 }
 
 export const BeerMenu: React.FC<BeerMenuProps> = ({
   beers,
   config,
-  onSelectBeerForOrder
+  onSelectBeerForOrder,
+  onEditBeer,
+  onAddNewBeer,
 }) => {
-  const [activeFilter, setActiveFilter] = useState<'todos' | 'classicos' | 'especiais'>('todos');
+  const [activeFilter, setActiveFilter] = useState<string>('todos');
+
+  // Extract dynamic styles
+  const availableCategories = useMemo(() => {
+    const set = new Set<string>();
+    beers.forEach((b) => {
+      if (b.style) set.add(b.style);
+    });
+    return Array.from(set);
+  }, [beers]);
 
   const filteredBeers = beers.filter((beer) => {
-    if (activeFilter === 'classicos') return beer.id.includes('pilsen') || beer.id.includes('session');
-    if (activeFilter === 'especiais') return !beer.id.includes('pilsen');
-    return true;
+    if (activeFilter === 'todos') return true;
+    return beer.style.toLowerCase().includes(activeFilter.toLowerCase()) || beer.name.toLowerCase().includes(activeFilter.toLowerCase());
   });
 
   const handleQuickBeerWhatsApp = (beer: BeerProduct) => {
-    const text = `Olá! Gostaria de consultar o preço e disponibilidade de barris de *${beer.name}* (${beer.style}) para o meu evento!`;
+    const text = `Olá! Gostaria de consultar a disponibilidade e valores do chopp *${beer.name}* (${beer.style}) para o meu evento!`;
     openWhatsApp(config.primaryPhone, text);
   };
 
@@ -42,23 +54,43 @@ export const BeerMenu: React.FC<BeerMenuProps> = ({
           Barris higienizados, chopeiras reguladas e chopp sempre fresco direto da câmara fria.
         </p>
 
-        {/* Filter Pills */}
-        <div className="flex items-center justify-center gap-2 mt-4">
-          {[
-            { id: 'todos', label: 'Todos os Estilos' },
-            { id: 'classicos', label: 'Mais Vendidos' },
-            { id: 'especiais', label: 'Especiais & Artesanais' },
-          ].map((f) => (
+        {/* Action Controls for Catalog */}
+        {onAddNewBeer && (
+          <div className="flex items-center justify-center gap-2 mt-3">
             <button
-              key={f.id}
-              onClick={() => setActiveFilter(f.id as any)}
+              onClick={onAddNewBeer}
+              className="px-3.5 py-1.5 rounded-full bg-stone-900 border border-amber-500/40 hover:bg-amber-500 hover:text-stone-950 text-amber-300 text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>+ Adicionar Novo Chopp</span>
+            </button>
+          </div>
+        )}
+
+        {/* Filter Pills */}
+        <div className="flex flex-wrap items-center justify-center gap-1.5 mt-4">
+          <button
+            onClick={() => setActiveFilter('todos')}
+            className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all ${
+              activeFilter === 'todos'
+                ? 'bg-amber-500 text-stone-950 shadow-md shadow-amber-500/20'
+                : 'bg-stone-900 border border-stone-800 text-stone-400 hover:text-white'
+            }`}
+          >
+            Todos os Estilos ({beers.length})
+          </button>
+
+          {availableCategories.slice(0, 4).map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setActiveFilter(cat)}
               className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all ${
-                activeFilter === f.id
+                activeFilter === cat
                   ? 'bg-amber-500 text-stone-950 shadow-md shadow-amber-500/20'
                   : 'bg-stone-900 border border-stone-800 text-stone-400 hover:text-white'
               }`}
             >
-              {f.label}
+              {cat}
             </button>
           ))}
         </div>
@@ -77,7 +109,7 @@ export const BeerMenu: React.FC<BeerMenuProps> = ({
               <div className="flex items-start justify-between gap-3 mb-2">
                 <div className="flex items-center gap-3">
                   <div
-                    className="w-10 h-10 rounded-2xl flex items-center justify-center border border-white/20 shadow-md shrink-0"
+                    className="w-11 h-11 rounded-2xl flex items-center justify-center border border-white/20 shadow-md shrink-0"
                     style={{ backgroundColor: beer.colorHex }}
                   >
                     <Beer className="w-5 h-5 text-white/90 drop-shadow" />
@@ -90,12 +122,30 @@ export const BeerMenu: React.FC<BeerMenuProps> = ({
                   </div>
                 </div>
 
-                {beer.badge && (
-                  <span className="text-[10px] font-black uppercase tracking-wider bg-amber-500/15 text-amber-300 px-2.5 py-1 rounded-full border border-amber-500/30 shrink-0">
-                    {beer.badge}
-                  </span>
-                )}
+                <div className="flex items-center gap-1.5">
+                  {beer.badge && (
+                    <span className="text-[10px] font-black uppercase tracking-wider bg-amber-500/15 text-amber-300 px-2.5 py-1 rounded-full border border-amber-500/30 shrink-0">
+                      {beer.badge}
+                    </span>
+                  )}
+
+                  {onEditBeer && (
+                    <button
+                      onClick={() => onEditBeer(beer)}
+                      className="p-1.5 rounded-lg bg-stone-950 border border-stone-800 hover:border-amber-500 text-stone-400 hover:text-amber-400 transition-colors"
+                      title="Editar este chopp"
+                    >
+                      <Edit className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
               </div>
+
+              {beer.tagline && (
+                <p className="text-[11px] text-amber-300/80 font-medium italic mb-2">
+                  "{beer.tagline}"
+                </p>
+              )}
 
               <p className="text-xs text-stone-300 leading-relaxed mb-4">
                 {beer.description}
@@ -113,30 +163,38 @@ export const BeerMenu: React.FC<BeerMenuProps> = ({
                 </div>
                 <div>
                   <span className="block text-[10px] text-stone-400 font-medium">Temperatura</span>
-                  <span className="text-xs font-bold text-amber-400">{beer.temperature}</span>
+                  <span className="text-xs font-bold text-amber-400">{beer.temperature || '0°C a 2°C'}</span>
                 </div>
               </div>
 
               {/* Harmonization */}
-              <div className="flex items-center gap-2 text-xs text-stone-400 mb-4 bg-stone-900/50 px-2.5 py-1.5 rounded-lg border border-stone-800">
-                <Utensils className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-                <span className="truncate"><strong>Combina com:</strong> {beer.pairings}</span>
-              </div>
+              {beer.pairings && (
+                <div className="flex items-center gap-2 text-xs text-stone-400 mb-4 bg-stone-900/50 px-2.5 py-1.5 rounded-lg border border-stone-800">
+                  <Utensils className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                  <span className="truncate"><strong>Combina com:</strong> {beer.pairings}</span>
+                </div>
+              )}
             </div>
 
             {/* Pricing and Action Buttons */}
             <div className="pt-3 border-t border-stone-800/80">
-              <div className="flex items-center justify-between mb-3 text-xs">
-                <div className="text-center bg-stone-950 px-2.5 py-1 rounded-lg border border-stone-800">
-                  <span className="text-[10px] text-stone-400 block">Barril 30L</span>
+              <div className="flex items-center justify-between mb-3 text-xs gap-1.5">
+                {beer.price20L && (
+                  <div className="flex-1 text-center bg-stone-950 px-2 py-1 rounded-lg border border-stone-800">
+                    <span className="text-[9px] text-stone-400 block">20L</span>
+                    <strong className="text-white text-xs">{formatCurrency(beer.price20L)}</strong>
+                  </div>
+                )}
+                <div className="flex-1 text-center bg-stone-950 px-2 py-1 rounded-lg border border-stone-800">
+                  <span className="text-[9px] text-stone-400 block">30L</span>
                   <strong className="text-white text-xs">{beer.price30L ? formatCurrency(beer.price30L) : 'Consulte'}</strong>
                 </div>
-                <div className="text-center bg-stone-950 px-2.5 py-1 rounded-lg border border-stone-800">
-                  <span className="text-[10px] text-stone-400 block">Barril 50L</span>
+                <div className="flex-1 text-center bg-stone-950 px-2 py-1 rounded-lg border border-amber-500/30">
+                  <span className="text-[9px] text-amber-400 block">50L</span>
                   <strong className="text-amber-400 text-xs">{beer.price50L ? formatCurrency(beer.price50L) : 'Consulte'}</strong>
                 </div>
-                <div className="text-center bg-stone-950 px-2.5 py-1 rounded-lg border border-stone-800">
-                  <span className="text-[10px] text-stone-400 block">Growler 2L</span>
+                <div className="flex-1 text-center bg-stone-950 px-2 py-1 rounded-lg border border-stone-800">
+                  <span className="text-[9px] text-stone-400 block">Growler</span>
                   <strong className="text-white text-xs">{beer.priceGrowler ? formatCurrency(beer.priceGrowler * 2) : 'Consulte'}</strong>
                 </div>
               </div>
