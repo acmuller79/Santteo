@@ -27,6 +27,7 @@ import { BeerMenu } from './components/BeerMenu';
 import { BusinessInfo } from './components/BusinessInfo';
 import { ConfigModal } from './components/ConfigModal';
 import { ProductEditModal } from './components/ProductEditModal';
+import { AdminAuthModal } from './components/AdminAuthModal';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
 import { buildDirectWhatsAppUrl, formatPhoneDisplay } from './utils/whatsapp';
 
@@ -70,6 +71,46 @@ export default function App() {
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [editingBeer, setEditingBeer] = useState<BeerProduct | null>(null);
   const [selectedBeerIdForOrder, setSelectedBeerIdForOrder] = useState<string | undefined>();
+
+  // Admin Authentication State (User 97538325, Pass 9725)
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState<boolean>(() => {
+    try {
+      return sessionStorage.getItem('santteo_admin_auth') === 'true';
+    } catch {
+      return false;
+    }
+  });
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [pendingAction, setPendingAction] = useState<(() => void) | null>(null);
+
+  const requireAdminAuth = (action: () => void) => {
+    if (isAdminAuthenticated) {
+      action();
+    } else {
+      setPendingAction(() => action);
+      setIsAuthModalOpen(true);
+    }
+  };
+
+  const handleAdminLogout = () => {
+    try {
+      sessionStorage.removeItem('santteo_admin_auth');
+    } catch (e) {
+      console.warn('Session storage error:', e);
+    }
+    setIsAdminAuthenticated(false);
+    setIsSettingsOpen(false);
+    setIsProductModalOpen(false);
+  };
+
+  const handleAuthSuccess = () => {
+    setIsAdminAuthenticated(true);
+    setIsAuthModalOpen(false);
+    if (pendingAction) {
+      pendingAction();
+      setPendingAction(null);
+    }
+  };
 
   const handleSaveConfig = (newConfig: DistributorConfig) => {
     setConfig(newConfig);
@@ -150,7 +191,7 @@ export default function App() {
       {/* Header Profile */}
       <Header
         config={config}
-        onOpenSettings={() => setIsSettingsOpen(true)}
+        onOpenSettings={() => requireAdminAuth(() => setIsSettingsOpen(true))}
         onOpenOrder={() => {
           setSelectedBeerIdForOrder(undefined);
           setIsOrderOpen(true);
@@ -222,8 +263,8 @@ export default function App() {
           beers={beers}
           config={config}
           onSelectBeerForOrder={handleSelectBeerForOrder}
-          onEditBeer={(beer) => handleOpenEditBeer(beer)}
-          onAddNewBeer={() => handleOpenEditBeer(null)}
+          onEditBeer={(beer) => requireAdminAuth(() => handleOpenEditBeer(beer))}
+          onAddNewBeer={() => requireAdminAuth(() => handleOpenEditBeer(null))}
         />
 
         {/* Business Details, Hours, Coverage, FAQ & PIX */}
@@ -259,6 +300,7 @@ export default function App() {
         beers={beers}
         onSaveConfig={handleSaveConfig}
         onSaveBeers={handleSaveBeers}
+        onLogout={handleAdminLogout}
         onOpenProductModal={(beer) => {
           setIsSettingsOpen(false);
           handleOpenEditBeer(beer);
@@ -271,6 +313,16 @@ export default function App() {
         beer={editingBeer}
         onSaveBeer={handleSaveSingleBeer}
         onDeleteBeer={handleDeleteSingleBeer}
+      />
+
+      {/* Admin Authentication Modal */}
+      <AdminAuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => {
+          setIsAuthModalOpen(false);
+          setPendingAction(null);
+        }}
+        onSuccess={handleAuthSuccess}
       />
 
       {/* Footer */}
@@ -302,7 +354,7 @@ export default function App() {
             <span>•</span>
 
             <button
-              onClick={() => setIsSettingsOpen(true)}
+              onClick={() => requireAdminAuth(() => setIsSettingsOpen(true))}
               className="hover:text-amber-400 transition-colors flex items-center gap-1 text-stone-400"
             >
               <Settings className="w-3.5 h-3.5" />

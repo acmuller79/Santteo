@@ -29,7 +29,8 @@ import {
   ChevronUp,
   MessageCircle,
   Eye,
-  Layers
+  Layers,
+  LogOut
 } from 'lucide-react';
 import { DistributorConfig, BeerProduct, FAQItem, TrustBadge, QuickAction } from '../types';
 import { DEFAULT_CONFIG, DEFAULT_BEERS, DEFAULT_TRUST_BADGES, DEFAULT_FAQS } from '../data/defaultData';
@@ -43,6 +44,7 @@ interface ConfigModalProps {
   onSaveConfig: (newConfig: DistributorConfig) => void;
   onSaveBeers: (newBeers: BeerProduct[]) => void;
   onOpenProductModal?: (beer: BeerProduct | null) => void;
+  onLogout?: () => void;
 }
 
 type TabType = 'produtos' | 'identidade' | 'contatos' | 'promocoes' | 'links' | 'selos' | 'locais' | 'pagamentos' | 'faq' | 'backup';
@@ -55,6 +57,7 @@ export const ConfigModal: React.FC<ConfigModalProps> = ({
   onSaveConfig,
   onSaveBeers,
   onOpenProductModal,
+  onLogout,
 }) => {
   const [activeTab, setActiveTab] = useState<TabType>('produtos');
   const [formData, setFormData] = useState<DistributorConfig>({ ...config });
@@ -245,12 +248,25 @@ export const ConfigModal: React.FC<ConfigModalProps> = ({
               <p className="text-xs text-stone-400">Edite produtos, preços de barris, textos, WhatsApp, banners e FAQ</p>
             </div>
           </div>
-          <button
-            onClick={onClose}
-            className="p-2 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-400 hover:text-white transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-2">
+            {onLogout && (
+              <button
+                type="button"
+                onClick={onLogout}
+                className="px-3 py-1.5 rounded-xl bg-stone-800 hover:bg-red-950/60 text-stone-400 hover:text-red-400 border border-stone-700 hover:border-red-800 text-xs font-semibold flex items-center gap-1.5 transition-colors"
+                title="Sair da área administrativa"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Bloquear / Sair</span>
+              </button>
+            )}
+            <button
+              onClick={onClose}
+              className="p-2 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-400 hover:text-white transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         {/* Tab Navigation */}
