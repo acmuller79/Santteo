@@ -139,7 +139,7 @@ export default function App() {
                   {promo?.title || 'Chopeira Elétrica Inclusa nos Barris de 30L e 50L'}
                 </span>
                 <p className="text-xs text-stone-300 mt-0.5">
-                  {promo?.subtitle || 'Levamos o kit completo regulado com CO2 e instalação no seu evento em Balneário Camboriú!'}
+                  {promo?.subtitle || 'Levamos o kit completo regulado com CO2 e instalação no seu evento em Balneário Camboriú e Região!'}
                 </p>
               </div>
             </div>
@@ -223,7 +223,7 @@ export default function App() {
         <div className="max-w-4xl mx-auto space-y-4">
           <div className="flex flex-wrap items-center justify-center gap-4 text-stone-300">
             <a
-              href={buildDirectWhatsAppUrl(config.primaryPhone, 'Olá! Gostaria de atendimento para chopp em Balneário Camboriú.')}
+              href={buildDirectWhatsAppUrl(config.primaryPhone, 'Olá! Gostaria de atendimento para chopp em Balneário Camboriú e Região.')}
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-emerald-400 transition-colors flex items-center gap-1.5"

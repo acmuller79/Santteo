@@ -48,7 +48,7 @@ export const Header: React.FC<HeaderProps> = ({ config, onOpenOrder }) => {
           </span>
           <span className="font-medium text-emerald-400">Atendimento Online</span>
           <span className="hidden sm:inline text-stone-500">•</span>
-          <span className="hidden sm:inline text-stone-400">Balneário Camboriú - SC</span>
+          <span className="hidden sm:inline text-stone-400">Balneário Camboriú e Região</span>
         </div>
 
         <div className="flex items-center gap-2">

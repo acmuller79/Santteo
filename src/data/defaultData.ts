@@ -5,7 +5,7 @@ export const DEFAULT_TRUST_BADGES: TrustBadge[] = [
   {
     id: 'badge-1',
     title: 'Entrega Pontual',
-    subtitle: 'Em Balneário Camboriú-SC',
+    subtitle: 'Balneário Camboriú e Região',
     icon: 'Truck'
   },
   {
@@ -36,8 +36,8 @@ export const DEFAULT_FAQS: FAQItem[] = [
   },
   {
     id: 'faq-2',
-    question: 'Vocês entregam e instalam em Balneário Camboriú?',
-    answer: 'Sim! Entregamos pontualmente em Balneário Camboriú - SC, realizamos toda a instalação da chopeira e deixamos o chopp na temperatura ideal para você servir.'
+    question: 'Vocês entregam e instalam em Balneário Camboriú e Região?',
+    answer: 'Sim! Entregamos pontualmente em Balneário Camboriú e Região, realizamos toda a instalação da chopeira e deixamos o chopp na temperatura ideal para você servir.'
   },
   {
     id: 'faq-3',
@@ -47,7 +47,7 @@ export const DEFAULT_FAQS: FAQItem[] = [
   {
     id: 'faq-4',
     question: 'Quais são as formas de pagamento?',
-    answer: 'Aceitamos PIX oficial (CNPJ: 72.210.032/0001-22 - Titular: Renan da Silva Rocha), Cartões de Crédito (com opção de parcelamento) e Débito no ato da entrega.'
+    answer: 'Aceitamos PIX oficial (CNPJ: 68.615.867/0001-95 - Titular: Renan da Silva Rocha) e Cartões de Crédito (com opção de parcelamento em até 12x) ou Débito.'
   },
   {
     id: 'faq-5',
@@ -59,28 +59,28 @@ export const DEFAULT_FAQS: FAQItem[] = [
 export const DEFAULT_CONFIG: DistributorConfig = {
   name: 'Santtêo',
   tagline: 'Distribuição & Fornecimento de Chopp',
-  slogan: 'Barris de 30L e 50L • Chopeiras Elétricas • Balneário Camboriú - SC',
+  slogan: 'Barris de 30L e 50L • Chopeiras Elétricas • Balneário Camboriú e Região',
   logoUrl: santteoLogo,
   primaryPhone: '5547997538325',
   supportPhone: '5547997538325',
-  whatsappWelcomeMessage: 'Olá! Gostaria de fazer um pedido de chopp Santtêo para entrega em Balneário Camboriú.',
-  supportWelcomeMessage: 'Olá! Preciso de atendimento técnico sobre a chopeira ou evento em Balneário Camboriú.',
+  whatsappWelcomeMessage: 'Olá! Gostaria de fazer um pedido de chopp Santtêo para entrega em Balneário Camboriú e Região.',
+  supportWelcomeMessage: 'Olá! Preciso de atendimento técnico sobre a chopeira ou evento em Balneário Camboriú e Região.',
   instagramUser: 'santteochopp',
-  address: 'Balneário Camboriú - SC',
-  cityState: 'Balneário Camboriú - SC',
+  address: 'Balneário Camboriú e Região',
+  cityState: 'Balneário Camboriú e Região',
   googleMapsUrl: 'https://maps.google.com/?q=Balneario+Camboriu+SC',
-  pixKey: '72.210.032/0001-22',
+  pixKey: '68.615.867/0001-95',
   pixKeyType: 'CNPJ',
   pixName: 'Renan da Silva Rocha',
   workingHoursWeekday: 'Segunda a Sexta: 08:00 às 20:00',
   workingHoursWeekend: 'Sábado e Domingo: 08:00 às 22:00 (Plantão p/ Eventos)',
-  deliveryZones: ['Balneário Camboriú - SC'],
-  bannerBadge: '⚡ Chopp Santtêo em Balneário Camboriú - SC • Chopeiras Inclusas',
+  deliveryZones: ['Balneário Camboriú e Região'],
+  bannerBadge: '⚡ Chopp Santtêo em Balneário Camboriú e Região • Chopeiras Inclusas',
   freeChopeiraOnKegs: true,
   promoBanner: {
     enabled: true,
     title: 'Chopeira Elétrica Inclusa nos Barris de 30L e 50L',
-    subtitle: 'Levamos o kit completo regulado com CO2 e instalação no seu evento em Balneário Camboriú!',
+    subtitle: 'Levamos o kit completo regulado com CO2 e instalação no seu evento em Balneário Camboriú e Região!',
     buttonText: 'Aproveitar Promoção',
     targetBeerId: 'pilsen-puro-malte'
   },

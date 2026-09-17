@@ -31,7 +31,7 @@ export const BeerMenu: React.FC<BeerMenuProps> = ({
   });
 
   const handleQuickBeerWhatsApp = (beer: BeerProduct) => {
-    const text = `Olá! Gostaria de consultar a disponibilidade e valores do chopp *${beer.name}* (${beer.style}) para o meu evento em Balneário Camboriú!`;
+    const text = `Olá! Gostaria de consultar a disponibilidade e valores do chopp *${beer.name}* (${beer.style}) para o meu evento em Balneário Camboriú e Região!`;
     openWhatsApp(config.primaryPhone, text);
   };
 
