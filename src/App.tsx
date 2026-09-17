@@ -27,7 +27,7 @@ import { FloatingWhatsApp } from './components/FloatingWhatsApp';
 import { buildDirectWhatsAppUrl, formatPhoneDisplay } from './utils/whatsapp';
 
 export default function App() {
-  // Always initialize with updated Santtêo Balneário Camboriú configuration
+  // Initialize with updated Santtêo Balneário Camboriú configuration
   const [config, setConfig] = useState<DistributorConfig>(() => {
     try {
       // Clear out outdated config cache to guarantee user's explicit values
@@ -42,25 +42,27 @@ export default function App() {
     return DEFAULT_CONFIG;
   });
 
-  // Check if user places the exact file in public/
+  // Automatically sync local uploaded logo to server so all visitors/clients see it permanently
   useEffect(() => {
-    fetch('/IMG-20260826-WA0012.jpg', { method: 'HEAD' })
-      .then((res) => {
-        if (res.ok) {
-          setConfig((prev) => ({ ...prev, logoUrl: '/IMG-20260826-WA0012.jpg' }));
-        }
-      })
-      .catch(() => {});
-  }, []);
-
-  const handleUpdateLogo = (newLogoUrl: string) => {
     try {
-      localStorage.setItem('santteo_official_logo', newLogoUrl);
+      const savedLogo = localStorage.getItem('santteo_official_logo');
+      if (savedLogo && savedLogo.startsWith('data:image')) {
+        fetch('/api/save-logo', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ image: savedLogo }),
+        })
+          .then((res) => {
+            if (res.ok) {
+              console.log('Logo successfully persisted to server for all clients');
+            }
+          })
+          .catch((err) => console.warn('Could not sync logo to server:', err));
+      }
     } catch (e) {
-      console.warn('LocalStorage error:', e);
+      console.warn('LocalStorage access error:', e);
     }
-    setConfig((prev) => ({ ...prev, logoUrl: newLogoUrl }));
-  };
+  }, []);
 
   const [beers, setBeers] = useState<BeerProduct[]>(() => {
     try {
@@ -121,7 +123,6 @@ export default function App() {
           setSelectedBeerIdForOrder(undefined);
           setIsOrderOpen(true);
         }}
-        onUpdateLogo={handleUpdateLogo}
       />
 
       {/* Main Container */}
