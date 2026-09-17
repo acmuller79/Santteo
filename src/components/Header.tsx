@@ -1,15 +1,53 @@
-import React from 'react';
-import { Beer, Share2, PhoneCall, Sparkles, MapPin } from 'lucide-react';
+import React, { useRef, useState } from 'react';
+import { Beer, Share2, PhoneCall, Sparkles, MapPin, Camera, Upload, Check } from 'lucide-react';
 import { DistributorConfig } from '../types';
 import { buildDirectWhatsAppUrl, formatPhoneDisplay } from '../utils/whatsapp';
 
 interface HeaderProps {
   config: DistributorConfig;
   onOpenOrder: () => void;
+  onUpdateLogo?: (newLogoUrl: string) => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ config, onOpenOrder }) => {
-  const [copiedLink, setCopiedLink] = React.useState(false);
+export const Header: React.FC<HeaderProps> = ({ config, onOpenOrder, onUpdateLogo }) => {
+  const [copiedLink, setCopiedLink] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && onUpdateLogo) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const result = event.target?.result as string;
+        if (result) {
+          onUpdateLogo(result);
+          setUploadSuccess(true);
+          setTimeout(() => setUploadSuccess(false), 3000);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file && onUpdateLogo) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const result = event.target?.result as string;
+        if (result) {
+          onUpdateLogo(result);
+          setUploadSuccess(true);
+          setTimeout(() => setUploadSuccess(false), 3000);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -66,16 +104,37 @@ export const Header: React.FC<HeaderProps> = ({ config, onOpenOrder }) => {
 
       {/* Hero profile container */}
       <div className="max-w-4xl mx-auto px-4 py-8 sm:py-10 text-center relative z-10">
+        {/* Hidden file input for uploading the exact file */}
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          accept="image/*"
+          className="hidden"
+        />
+
         {/* Brand Icon / Logo Avatar */}
-        <div className="relative inline-block mb-4">
-          <div className="w-28 h-28 sm:w-32 sm:h-32 mx-auto rounded-3xl bg-gradient-to-tr from-amber-600 via-amber-400 to-yellow-300 p-1 shadow-2xl shadow-amber-500/25 ring-4 ring-stone-800">
+        <div className="relative inline-block mb-3 group">
+          <div
+            onDragOver={(e) => {
+              e.preventDefault();
+              setIsDragging(true);
+            }}
+            onDragLeave={() => setIsDragging(false)}
+            onDrop={handleDrop}
+            onClick={() => onUpdateLogo && fileInputRef.current?.click()}
+            title={onUpdateLogo ? 'Clique ou arraste o arquivo da imagem exata aqui' : config.name}
+            className={`w-32 h-40 sm:w-36 sm:h-44 mx-auto rounded-3xl bg-gradient-to-tr from-amber-600 via-amber-400 to-yellow-300 p-1 shadow-2xl shadow-amber-500/25 ring-4 ring-stone-800 cursor-pointer transition-all duration-300 ${
+              isDragging ? 'scale-105 ring-emerald-500 ring-offset-2' : 'hover:scale-102'
+            }`}
+          >
             <div className="w-full h-full bg-stone-950 rounded-[22px] flex flex-col items-center justify-center relative overflow-hidden">
               {config.logoUrl ? (
                 <img
                   src={config.logoUrl}
                   alt={config.name}
                   referrerPolicy="no-referrer"
-                  className="w-full h-full object-cover object-center transform hover:scale-105 transition-transform duration-300"
+                  className="w-full h-full object-contain object-center transform group-hover:scale-105 transition-transform duration-300 p-1"
                 />
               ) : (
                 <>
@@ -87,6 +146,19 @@ export const Header: React.FC<HeaderProps> = ({ config, onOpenOrder }) => {
                   <span className="text-[10px] uppercase font-bold tracking-widest text-amber-300/80 mt-1">CHOPP</span>
                 </>
               )}
+
+              {/* Hover overlay for instant upload */}
+              {onUpdateLogo && (
+                <div className="absolute inset-0 bg-stone-950/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-2 text-center">
+                  <Camera className="w-6 h-6 text-amber-400 mb-1" />
+                  <span className="text-[10px] font-bold text-white uppercase tracking-wider">
+                    Trocar Imagem
+                  </span>
+                  <span className="text-[9px] text-stone-400 mt-0.5">
+                    Clique ou arraste
+                  </span>
+                </div>
+              )}
             </div>
           </div>
 
@@ -95,6 +167,34 @@ export const Header: React.FC<HeaderProps> = ({ config, onOpenOrder }) => {
             OFICIAL
           </div>
         </div>
+
+        {/* Quick button to select exact file */}
+        {onUpdateLogo && (
+          <div className="mb-4">
+            <button
+              id="btn-upload-exact-logo"
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold transition-all shadow-sm ${
+                uploadSuccess
+                  ? 'bg-emerald-500 text-stone-950 font-bold'
+                  : 'bg-stone-900/90 border border-amber-500/40 text-amber-300 hover:bg-amber-500 hover:text-stone-950'
+              }`}
+            >
+              {uploadSuccess ? (
+                <>
+                  <Check className="w-3.5 h-3.5" />
+                  <span>Imagem Exata Aplicada!</span>
+                </>
+              ) : (
+                <>
+                  <Upload className="w-3.5 h-3.5" />
+                  <span>Carregar arquivo original (IMG-20260826-WA0012.jpg)</span>
+                </>
+              )}
+            </button>
+          </div>
+        )}
 
         {/* Distributor Title */}
         <h1 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight mb-2 font-display">
@@ -110,9 +210,9 @@ export const Header: React.FC<HeaderProps> = ({ config, onOpenOrder }) => {
         </p>
 
         {/* Quick Address / Location Pill */}
-        <div className="inline-flex items-center gap-1.5 text-xs text-stone-400 bg-stone-900/90 border border-stone-800 px-3.5 py-1.5 rounded-full mb-6 max-w-full truncate">
-          <MapPin className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-          <span className="truncate">{config.address} • {config.cityState}</span>
+        <div className="inline-flex items-center gap-1.5 text-xs text-stone-300 bg-stone-900/90 border border-stone-800 px-3.5 py-1.5 rounded-full mb-6 max-w-full truncate shadow-sm">
+          <MapPin className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+          <span className="truncate font-medium">{config.cityState}</span>
         </div>
 
         {/* Primary Call to Actions */}

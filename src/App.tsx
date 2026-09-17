@@ -32,11 +32,35 @@ export default function App() {
     try {
       // Clear out outdated config cache to guarantee user's explicit values
       localStorage.removeItem('chopp_distributor_config');
+      const savedLogo = localStorage.getItem('santteo_official_logo');
+      if (savedLogo) {
+        return { ...DEFAULT_CONFIG, logoUrl: savedLogo };
+      }
     } catch (e) {
       console.warn('LocalStorage error:', e);
     }
     return DEFAULT_CONFIG;
   });
+
+  // Check if user places the exact file in public/
+  useEffect(() => {
+    fetch('/IMG-20260826-WA0012.jpg', { method: 'HEAD' })
+      .then((res) => {
+        if (res.ok) {
+          setConfig((prev) => ({ ...prev, logoUrl: '/IMG-20260826-WA0012.jpg' }));
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const handleUpdateLogo = (newLogoUrl: string) => {
+    try {
+      localStorage.setItem('santteo_official_logo', newLogoUrl);
+    } catch (e) {
+      console.warn('LocalStorage error:', e);
+    }
+    setConfig((prev) => ({ ...prev, logoUrl: newLogoUrl }));
+  };
 
   const [beers, setBeers] = useState<BeerProduct[]>(() => {
     try {
@@ -97,6 +121,7 @@ export default function App() {
           setSelectedBeerIdForOrder(undefined);
           setIsOrderOpen(true);
         }}
+        onUpdateLogo={handleUpdateLogo}
       />
 
       {/* Main Container */}

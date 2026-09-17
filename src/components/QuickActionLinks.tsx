@@ -230,7 +230,7 @@ export const QuickActionLinks: React.FC<QuickActionLinksProps> = ({
                 Localização / Rota no Google Maps
               </span>
               <p className="text-xs text-stone-400 mt-0.5 truncate">
-                {config.address} • {config.cityState}
+                {config.cityState}
               </p>
             </div>
           </div>
