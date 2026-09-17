@@ -12,10 +12,8 @@ import {
   CheckCircle2,
   Share2,
   Calendar,
-  Settings,
   Award,
   Clock,
-  Plus
 } from 'lucide-react';
 import { DistributorConfig, BeerProduct, TrustBadge } from './types';
 import { DEFAULT_CONFIG, DEFAULT_BEERS, DEFAULT_TRUST_BADGES } from './data/defaultData';
@@ -25,131 +23,35 @@ import { OrderSimulator } from './components/OrderSimulator';
 import { ChoppCalculator } from './components/ChoppCalculator';
 import { BeerMenu } from './components/BeerMenu';
 import { BusinessInfo } from './components/BusinessInfo';
-import { ConfigModal } from './components/ConfigModal';
-import { ProductEditModal } from './components/ProductEditModal';
-import { AdminAuthModal } from './components/AdminAuthModal';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
 import { buildDirectWhatsAppUrl, formatPhoneDisplay } from './utils/whatsapp';
 
 export default function App() {
+  // Always initialize with updated Santtêo Balneário Camboriú configuration
   const [config, setConfig] = useState<DistributorConfig>(() => {
     try {
-      const saved = localStorage.getItem('chopp_distributor_config');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (parsed.name === 'Empório & Distribuidora de Chopp' || !parsed.logoUrl) {
-          return { ...DEFAULT_CONFIG, ...parsed, name: 'Santtêo', logoUrl: DEFAULT_CONFIG.logoUrl };
-        }
-        return { ...DEFAULT_CONFIG, ...parsed };
-      }
+      // Clear out outdated config cache to guarantee user's explicit values
+      localStorage.removeItem('chopp_distributor_config');
     } catch (e) {
-      console.warn('Error loading config from localStorage:', e);
+      console.warn('LocalStorage error:', e);
     }
     return DEFAULT_CONFIG;
   });
 
   const [beers, setBeers] = useState<BeerProduct[]>(() => {
     try {
-      const saved = localStorage.getItem('chopp_distributor_beers');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          return parsed;
-        }
-      }
+      localStorage.removeItem('chopp_distributor_beers');
     } catch (e) {
-      console.warn('Error loading beers from localStorage:', e);
+      console.warn('LocalStorage error:', e);
     }
     return DEFAULT_BEERS;
   });
 
-  // Modals state
+  // Active Modals state
   const [isOrderOpen, setIsOrderOpen] = useState(false);
   const [isCalculatorOpen, setIsCalculatorOpen] = useState(false);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isPixModalOpen, setIsPixModalOpen] = useState(false);
-  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
-  const [editingBeer, setEditingBeer] = useState<BeerProduct | null>(null);
   const [selectedBeerIdForOrder, setSelectedBeerIdForOrder] = useState<string | undefined>();
-
-  // Admin Authentication State (User 97538325, Pass 9725)
-  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState<boolean>(() => {
-    try {
-      return sessionStorage.getItem('santteo_admin_auth') === 'true';
-    } catch {
-      return false;
-    }
-  });
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [pendingAction, setPendingAction] = useState<(() => void) | null>(null);
-
-  const requireAdminAuth = (action: () => void) => {
-    if (isAdminAuthenticated) {
-      action();
-    } else {
-      setPendingAction(() => action);
-      setIsAuthModalOpen(true);
-    }
-  };
-
-  const handleAdminLogout = () => {
-    try {
-      sessionStorage.removeItem('santteo_admin_auth');
-    } catch (e) {
-      console.warn('Session storage error:', e);
-    }
-    setIsAdminAuthenticated(false);
-    setIsSettingsOpen(false);
-    setIsProductModalOpen(false);
-  };
-
-  const handleAuthSuccess = () => {
-    setIsAdminAuthenticated(true);
-    setIsAuthModalOpen(false);
-    if (pendingAction) {
-      pendingAction();
-      setPendingAction(null);
-    }
-  };
-
-  const handleSaveConfig = (newConfig: DistributorConfig) => {
-    setConfig(newConfig);
-    try {
-      localStorage.setItem('chopp_distributor_config', JSON.stringify(newConfig));
-    } catch (e) {
-      console.error('Error saving config:', e);
-    }
-  };
-
-  const handleSaveBeers = (newBeers: BeerProduct[]) => {
-    setBeers(newBeers);
-    try {
-      localStorage.setItem('chopp_distributor_beers', JSON.stringify(newBeers));
-    } catch (e) {
-      console.error('Error saving beers:', e);
-    }
-  };
-
-  const handleSaveSingleBeer = (savedBeer: BeerProduct) => {
-    const exists = beers.some((b) => b.id === savedBeer.id);
-    let updated: BeerProduct[];
-    if (exists) {
-      updated = beers.map((b) => (b.id === savedBeer.id ? savedBeer : b));
-    } else {
-      updated = [...beers, savedBeer];
-    }
-    handleSaveBeers(updated);
-  };
-
-  const handleDeleteSingleBeer = (beerId: string) => {
-    const updated = beers.filter((b) => b.id !== beerId);
-    handleSaveBeers(updated);
-  };
-
-  const handleOpenEditBeer = (beer: BeerProduct | null) => {
-    setEditingBeer(beer);
-    setIsProductModalOpen(true);
-  };
 
   const handleSelectBeerForOrder = (beerId: string) => {
     setSelectedBeerIdForOrder(beerId);
@@ -191,7 +93,6 @@ export default function App() {
       {/* Header Profile */}
       <Header
         config={config}
-        onOpenSettings={() => requireAdminAuth(() => setIsSettingsOpen(true))}
         onOpenOrder={() => {
           setSelectedBeerIdForOrder(undefined);
           setIsOrderOpen(true);
@@ -200,7 +101,7 @@ export default function App() {
 
       {/* Main Container */}
       <main className="flex-1 w-full max-w-4xl mx-auto px-2 sm:px-4 py-4 space-y-4">
-        {/* Promotional Highlight Banner (Editable) */}
+        {/* Promotional Highlight Banner */}
         {promo?.enabled !== false && (
           <div className="mx-2 sm:mx-0 p-4 rounded-3xl bg-gradient-to-r from-amber-500/20 via-amber-600/15 to-yellow-500/20 border border-amber-500/30 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-lg animate-in fade-in">
             <div className="flex items-center gap-3 text-center sm:text-left">
@@ -209,10 +110,10 @@ export default function App() {
               </div>
               <div>
                 <span className="font-extrabold text-sm sm:text-base text-amber-300 block">
-                  {promo?.title || 'Chopeira Elétrica Grátis nos Barris de 30L e 50L'}
+                  {promo?.title || 'Chopeira Elétrica Inclusa nos Barris de 30L e 50L'}
                 </span>
                 <p className="text-xs text-stone-300 mt-0.5">
-                  {promo?.subtitle || 'Levamos o kit completo regulado com CO2 e instalação no local da sua festa!'}
+                  {promo?.subtitle || 'Levamos o kit completo regulado com CO2 e instalação no seu evento em Balneário Camboriú!'}
                 </p>
               </div>
             </div>
@@ -242,7 +143,7 @@ export default function App() {
           onOpenPix={() => setIsPixModalOpen(true)}
         />
 
-        {/* Trust Badges (Dynamic) */}
+        {/* Trust Badges */}
         <section className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 px-2 sm:px-0 py-2">
           {(config.trustBadges && config.trustBadges.length > 0 ? config.trustBadges : DEFAULT_TRUST_BADGES).map(
             (badge) => (
@@ -263,8 +164,6 @@ export default function App() {
           beers={beers}
           config={config}
           onSelectBeerForOrder={handleSelectBeerForOrder}
-          onEditBeer={(beer) => requireAdminAuth(() => handleOpenEditBeer(beer))}
-          onAddNewBeer={() => requireAdminAuth(() => handleOpenEditBeer(null))}
         />
 
         {/* Business Details, Hours, Coverage, FAQ & PIX */}
@@ -293,44 +192,12 @@ export default function App() {
         config={config}
       />
 
-      <ConfigModal
-        isOpen={isSettingsOpen}
-        onClose={() => setIsSettingsOpen(false)}
-        config={config}
-        beers={beers}
-        onSaveConfig={handleSaveConfig}
-        onSaveBeers={handleSaveBeers}
-        onLogout={handleAdminLogout}
-        onOpenProductModal={(beer) => {
-          setIsSettingsOpen(false);
-          handleOpenEditBeer(beer);
-        }}
-      />
-
-      <ProductEditModal
-        isOpen={isProductModalOpen}
-        onClose={() => setIsProductModalOpen(false)}
-        beer={editingBeer}
-        onSaveBeer={handleSaveSingleBeer}
-        onDeleteBeer={handleDeleteSingleBeer}
-      />
-
-      {/* Admin Authentication Modal */}
-      <AdminAuthModal
-        isOpen={isAuthModalOpen}
-        onClose={() => {
-          setIsAuthModalOpen(false);
-          setPendingAction(null);
-        }}
-        onSuccess={handleAuthSuccess}
-      />
-
       {/* Footer */}
       <footer className="mt-12 bg-stone-950 border-t border-stone-900 text-stone-400 py-8 px-4 text-center text-xs">
         <div className="max-w-4xl mx-auto space-y-4">
           <div className="flex flex-wrap items-center justify-center gap-4 text-stone-300">
             <a
-              href={buildDirectWhatsAppUrl(config.primaryPhone, 'Olá! Gostaria de atendimento.')}
+              href={buildDirectWhatsAppUrl(config.primaryPhone, 'Olá! Gostaria de atendimento para chopp em Balneário Camboriú.')}
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-emerald-400 transition-colors flex items-center gap-1.5"
@@ -350,23 +217,13 @@ export default function App() {
               <Instagram className="w-4 h-4 text-pink-400" />
               <span>Instagram: @{config.instagramUser.replace('@', '')}</span>
             </a>
-
-            <span>•</span>
-
-            <button
-              onClick={() => requireAdminAuth(() => setIsSettingsOpen(true))}
-              className="hover:text-amber-400 transition-colors flex items-center gap-1 text-stone-400"
-            >
-              <Settings className="w-3.5 h-3.5" />
-              <span>Painel de Personalização Completa</span>
-            </button>
           </div>
 
           <p className="text-[11px] text-stone-400">
-            {config.name} • {config.address} • {config.cityState}
+            {config.name} • {config.cityState} • PIX CNPJ: {config.pixKey} (Titular: {config.pixName || 'Renan da Silva Rocha'})
           </p>
 
-          <p className="text-[10px] text-stone-400">
+          <p className="text-[10px] text-stone-500">
             Beba com moderação. Proibida a venda de bebidas alcoólicas para menores de 18 anos (Lei 8.069/90).
           </p>
         </div>

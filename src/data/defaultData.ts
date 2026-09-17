@@ -1,11 +1,11 @@
 import { BeerProduct, DistributorConfig, QuickAction, TrustBadge, FAQItem } from '../types';
-import santteoLogo from '../assets/images/santteo_badge_1787785971094.jpg';
+import santteoLogo from '../assets/images/santteo_shield_logo.jpg';
 
 export const DEFAULT_TRUST_BADGES: TrustBadge[] = [
   {
     id: 'badge-1',
     title: 'Entrega Pontual',
-    subtitle: 'Na hora do seu evento',
+    subtitle: 'Em Balneário Camboriú-SC',
     icon: 'Truck'
   },
   {
@@ -23,7 +23,7 @@ export const DEFAULT_TRUST_BADGES: TrustBadge[] = [
   {
     id: 'badge-4',
     title: 'Plantão WhatsApp',
-    subtitle: 'Suporte no evento',
+    subtitle: '(47) 99753-8325',
     icon: 'MessageCircle'
   }
 ];
@@ -32,54 +32,55 @@ export const DEFAULT_FAQS: FAQItem[] = [
   {
     id: 'faq-1',
     question: 'A chopeira acompanha o barril?',
-    answer: 'Sim! Em pedidos de barris de 30L ou 50L emprestamos a chopeira (elétrica ou a gelo) com cilindro de CO2 e kit completo já regulado e instalado na sua festa sem custo adicional para a maioria das regiões.'
+    answer: 'Sim! Em pedidos de barris de 30L ou 50L fornecemos a chopeira com kit completo regulado, cilindro de CO2 e instalação no seu evento sem complicação.'
   },
   {
     id: 'faq-2',
-    question: 'Vocês entregam e instalam no local?',
-    answer: 'Entregamos pontualmente no local da sua festa, fazemos toda a instalação da chopeira, deixamos o chopp na temperatura ideal e ensinamos a tirar o chopp perfeito.'
+    question: 'Vocês entregam e instalam em Balneário Camboriú?',
+    answer: 'Sim! Entregamos pontualmente em Balneário Camboriú - SC, realizamos toda a instalação da chopeira e deixamos o chopp na temperatura ideal para você servir.'
   },
   {
     id: 'faq-3',
-    question: 'Quanto tempo antes devo fazer o pedido?',
-    answer: 'Recomendamos reservar com pelo menos 2 a 4 dias de antecedência para garantir a disponibilidade de chopeiras elétricas no final de semana. Para pedidos de emergência no mesmo dia, consulte disponibilidade via WhatsApp!'
+    question: 'Quais tamanhos de barril estão disponíveis?',
+    answer: 'Trabalhamos exclusivamente com os tamanhos de 30 Litros e 50 Litros, garantindo o melhor padrão de qualidade, temperatura e custo-benefício.'
   },
   {
     id: 'faq-4',
     question: 'Quais são as formas de pagamento?',
-    answer: 'Aceitamos PIX (com desconto especial), Cartões de Crédito (com opção de parcelamento) e Cartão de Débito no ato da entrega.'
+    answer: 'Aceitamos PIX oficial (CNPJ: 72.210.032/0001-22 - Titular: Renan da Silva Rocha), Cartões de Crédito (com opção de parcelamento) e Débito no ato da entrega.'
   },
   {
     id: 'faq-5',
-    question: 'Vocês recolhem a chopeira depois do evento?',
-    answer: 'Sim! Agendamos o recolhimento no dia seguinte ou na segunda-feira sem que você precise se preocupar com nada.'
+    question: 'Quanto tempo antes devo fazer o pedido?',
+    answer: 'Recomendamos reservar com antecedência para garantir chopeiras no fim de semana. Para pedidos de última hora, consulte disponibilidade no WhatsApp!'
   }
 ];
 
 export const DEFAULT_CONFIG: DistributorConfig = {
   name: 'Santtêo',
   tagline: 'Distribuição & Fornecimento de Chopp',
-  slogan: 'Barris de 20L, 30L e 50L • Chopeiras Elétricas • Entrega e Instalação Grátis',
+  slogan: 'Barris de 30L e 50L • Chopeiras Elétricas • Balneário Camboriú - SC',
   logoUrl: santteoLogo,
-  primaryPhone: '5511999998888',
-  supportPhone: '5511988887777',
-  whatsappWelcomeMessage: 'Olá! Gostaria de fazer um pedido ou tirar dúvidas sobre o chopp Santtêo.',
-  supportWelcomeMessage: 'Olá! Preciso de suporte técnico sobre a chopeira ou instalação do barril no meu evento.',
+  primaryPhone: '5547997538325',
+  supportPhone: '5547997538325',
+  whatsappWelcomeMessage: 'Olá! Gostaria de fazer um pedido de chopp Santtêo para entrega em Balneário Camboriú.',
+  supportWelcomeMessage: 'Olá! Preciso de atendimento técnico sobre a chopeira ou evento em Balneário Camboriú.',
   instagramUser: 'santteochopp',
-  address: 'Av. das Cervejarias, 1500 - Galpão 04',
-  cityState: 'São Paulo - SP',
-  googleMapsUrl: 'https://maps.google.com/?q=Santteo+Distribuidora+de+Chopp',
-  pixKey: '12.345.678/0001-90',
+  address: 'Balneário Camboriú - SC',
+  cityState: 'Balneário Camboriú - SC',
+  googleMapsUrl: 'https://maps.google.com/?q=Balneario+Camboriu+SC',
+  pixKey: '72.210.032/0001-22',
   pixKeyType: 'CNPJ',
+  pixName: 'Renan da Silva Rocha',
   workingHoursWeekday: 'Segunda a Sexta: 08:00 às 20:00',
-  workingHoursWeekend: 'Sábado: 08:00 às 22:00 | Domingo: 08:00 às 16:00',
-  deliveryZones: ['Zona Central', 'Zona Sul', 'Zona Norte', 'Zona Oeste', 'Região Metropolitana'],
-  bannerBadge: '⚡ Plantão de Chopp Santtêo • Atendimento Rápido no WhatsApp',
+  workingHoursWeekend: 'Sábado e Domingo: 08:00 às 22:00 (Plantão p/ Eventos)',
+  deliveryZones: ['Balneário Camboriú - SC'],
+  bannerBadge: '⚡ Chopp Santtêo em Balneário Camboriú - SC • Chopeiras Inclusas',
   freeChopeiraOnKegs: true,
   promoBanner: {
     enabled: true,
-    title: 'Chopeira Elétrica Grátis nos Barris de 30L e 50L',
-    subtitle: 'Levamos o kit completo regulado com CO2 e instalação no local da sua festa!',
+    title: 'Chopeira Elétrica Inclusa nos Barris de 30L e 50L',
+    subtitle: 'Levamos o kit completo regulado com CO2 e instalação no seu evento em Balneário Camboriú!',
     buttonText: 'Aproveitar Promoção',
     targetBeerId: 'pilsen-puro-malte'
   },
@@ -98,11 +99,9 @@ export const DEFAULT_BEERS: BeerProduct[] = [
     ibu: 12,
     colorHex: '#E5A93C',
     badge: 'Campeão de Vendas',
-    availableSizes: ['20L', '30L', '50L', 'Growler'],
-    price20L: 280,
+    availableSizes: ['30L', '50L'],
     price30L: 380,
     price50L: 590,
-    priceGrowler: 25,
     temperature: '0°C a 2°C',
     pairings: 'Churrasco, petiscos fritos, hambúrgueres e queijos leves',
   },
@@ -116,11 +115,9 @@ export const DEFAULT_BEERS: BeerProduct[] = [
     ibu: 48,
     colorHex: '#C67A1D',
     badge: 'Para Apaixonados por Lúpulo',
-    availableSizes: ['20L', '30L', '50L', 'Growler'],
-    price20L: 350,
+    availableSizes: ['30L', '50L'],
     price30L: 490,
     price50L: 750,
-    priceGrowler: 35,
     temperature: '3°C a 5°C',
     pairings: 'Carnes defumadas, costela ao barbecue, queijos maturados e burgers gourmet',
   },
@@ -133,12 +130,10 @@ export const DEFAULT_BEERS: BeerProduct[] = [
     abv: 5.5,
     ibu: 8,
     colorHex: '#72173C',
-    badge: 'Sucesso Feminino & Festas',
-    availableSizes: ['20L', '30L', '50L', 'Growler'],
-    price20L: 310,
+    badge: 'Sucesso em Festas',
+    availableSizes: ['30L', '50L'],
     price30L: 420,
     price50L: 660,
-    priceGrowler: 30,
     temperature: '1°C a 3°C',
     pairings: 'Sobremesas, massas, tábuas de frios e noites festivas',
   },
@@ -152,11 +147,9 @@ export const DEFAULT_BEERS: BeerProduct[] = [
     ibu: 14,
     colorHex: '#DDA83A',
     badge: 'Super Refrescante',
-    availableSizes: ['20L', '30L', '50L', 'Growler'],
-    price20L: 320,
+    availableSizes: ['30L', '50L'],
     price30L: 440,
     price50L: 680,
-    priceGrowler: 28,
     temperature: '2°C a 4°C',
     pairings: 'Peixes, frutos do mar, saladas e comidas alemãs',
   },
@@ -170,11 +163,9 @@ export const DEFAULT_BEERS: BeerProduct[] = [
     ibu: 16,
     colorHex: '#2B1A13',
     badge: 'Saboroso e Encorpado',
-    availableSizes: ['20L', '30L', '50L', 'Growler'],
-    price20L: 300,
+    availableSizes: ['30L', '50L'],
     price30L: 410,
     price50L: 640,
-    priceGrowler: 28,
     temperature: '4°C a 6°C',
     pairings: 'Carnes vermelhas assadas, fondue, queijos fortes e chocolates',
   },
@@ -188,11 +179,9 @@ export const DEFAULT_BEERS: BeerProduct[] = [
     ibu: 26,
     colorHex: '#D8942B',
     badge: 'Ideal para Churrasco',
-    availableSizes: ['20L', '30L', '50L', 'Growler'],
-    price20L: 330,
+    availableSizes: ['30L', '50L'],
     price30L: 450,
     price50L: 700,
-    priceGrowler: 32,
     temperature: '2°C a 4°C',
     pairings: 'Linguiças artesanais, picanha, petiscos de boteco e frango a passarinho',
   }

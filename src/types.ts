@@ -9,7 +9,7 @@ export interface BeerProduct {
   colorHex: string;
   badge?: string;
   pricePerLiter?: number;
-  availableSizes: ('20L' | '30L' | '50L' | 'Growler')[];
+  availableSizes: ('30L' | '50L' | '20L' | 'Growler')[];
   price20L?: number;
   price30L?: number;
   price50L?: number;
@@ -75,6 +75,7 @@ export interface DistributorConfig {
   googleMapsUrl: string;
   pixKey: string;
   pixKeyType: 'CNPJ' | 'CPF' | 'Telefone' | 'E-mail' | 'Chave Aleatória';
+  pixName?: string;
   workingHoursWeekday: string;
   workingHoursWeekend: string;
   deliveryZones: string[];

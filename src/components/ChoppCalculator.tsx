@@ -33,8 +33,8 @@ export const ChoppCalculator: React.FC<ChoppCalculatorProps> = ({
   const menLiters = men * (baseRatePerPersonPerHour * 1.25) * Math.min(durationHours, 6);
   const womenLiters = women * (baseRatePerPersonPerHour * 0.85) * Math.min(durationHours, 6);
   
-  // Total rounded to clean 5L increments
-  const totalEstimatedLiters = Math.max(20, Math.ceil((menLiters + womenLiters) / 5) * 5);
+  // Total rounded to clean 10L increments, minimum 30L
+  const totalEstimatedLiters = Math.max(30, Math.ceil((menLiters + womenLiters) / 10) * 10);
 
   // Determine optimal keg combination
   let recommendation = '';

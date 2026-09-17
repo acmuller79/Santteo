@@ -1,15 +1,14 @@
 import React from 'react';
-import { Beer, Settings, Share2, PhoneCall, Sparkles, MapPin } from 'lucide-react';
+import { Beer, Share2, PhoneCall, Sparkles, MapPin } from 'lucide-react';
 import { DistributorConfig } from '../types';
 import { buildDirectWhatsAppUrl, formatPhoneDisplay } from '../utils/whatsapp';
 
 interface HeaderProps {
   config: DistributorConfig;
-  onOpenSettings: () => void;
   onOpenOrder: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ config, onOpenSettings, onOpenOrder }) => {
+export const Header: React.FC<HeaderProps> = ({ config, onOpenOrder }) => {
   const [copiedLink, setCopiedLink] = React.useState(false);
 
   const handleShare = async () => {
@@ -49,28 +48,18 @@ export const Header: React.FC<HeaderProps> = ({ config, onOpenSettings, onOpenOr
           </span>
           <span className="font-medium text-emerald-400">Atendimento Online</span>
           <span className="hidden sm:inline text-stone-500">•</span>
-          <span className="hidden sm:inline text-stone-400">Entrega rápida e chopeiras elétricas</span>
+          <span className="hidden sm:inline text-stone-400">Balneário Camboriú - SC</span>
         </div>
 
         <div className="flex items-center gap-2">
           <button
             id="btn-share-page"
             onClick={handleShare}
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-stone-800 hover:bg-stone-700 text-stone-300 transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-stone-800 hover:bg-stone-700 text-stone-300 transition-colors"
             title="Compartilhar página"
           >
             <Share2 className="w-3.5 h-3.5" />
             <span>{copiedLink ? 'Link Copiado!' : 'Compartilhar'}</span>
-          </button>
-
-          <button
-            id="btn-open-settings"
-            onClick={onOpenSettings}
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 transition-colors"
-            title="Personalizar dados da distribuidora (WhatsApp, nome, redes)"
-          >
-            <Settings className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Configurações</span>
           </button>
         </div>
       </div>

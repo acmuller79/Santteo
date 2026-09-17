@@ -60,16 +60,10 @@ export const OrderSimulator: React.FC<OrderSimulatorProps> = ({
 
   // Calculate estimated price
   let basePrice = 0;
-  if (order.kegSize === '20L') {
-    basePrice = selectedBeer?.price20L || 280;
-  } else if (order.kegSize === '30L') {
+  if (order.kegSize === '30L') {
     basePrice = selectedBeer?.price30L || 380;
-  } else if (order.kegSize === '50L') {
-    basePrice = selectedBeer?.price50L || 590;
-  } else if (order.kegSize === 'Growler') {
-    basePrice = (selectedBeer?.priceGrowler || 25) * 2; // 2L growler default
   } else {
-    basePrice = selectedBeer?.price30L || 380;
+    basePrice = selectedBeer?.price50L || 590;
   }
 
   let totalEstimate = basePrice * order.quantity;
@@ -161,30 +155,29 @@ export const OrderSimulator: React.FC<OrderSimulatorProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-amber-400 mb-2">
-                2. Tamanho do Barril / Embalagem
+                2. Tamanho do Barril (30L ou 50L)
               </label>
-              <div className="grid grid-cols-4 gap-1.5">
-                {((selectedBeer.availableSizes && selectedBeer.availableSizes.length > 0 ? selectedBeer.availableSizes : ['20L', '30L', '50L', 'Growler']) as ('20L' | '30L' | '50L' | 'Growler')[]).map((size) => {
+              <div className="grid grid-cols-2 gap-2">
+                {(['30L', '50L'] as const).map((size) => {
                   const isSelected = order.kegSize === size;
-                  let price = 0;
-                  if (size === '20L') price = selectedBeer.price20L || 280;
-                  if (size === '30L') price = selectedBeer.price30L || 380;
-                  if (size === '50L') price = selectedBeer.price50L || 590;
-                  if (size === 'Growler') price = (selectedBeer.priceGrowler || 25) * 2;
+                  const price = size === '30L' ? selectedBeer.price30L || 380 : selectedBeer.price50L || 590;
 
                   return (
                     <button
                       key={size}
                       type="button"
                       onClick={() => setOrder({ ...order, kegSize: size })}
-                      className={`p-2.5 rounded-2xl border text-center transition-all ${
+                      className={`p-3 rounded-2xl border text-center transition-all ${
                         isSelected
-                          ? 'bg-amber-500/20 border-amber-500 text-white font-bold ring-1 ring-amber-500'
+                          ? 'bg-amber-500/20 border-amber-500 text-white font-bold ring-1 ring-amber-500 shadow-md shadow-amber-500/10'
                           : 'bg-stone-950/60 border-stone-800 hover:border-stone-700 text-stone-400'
                       }`}
                     >
-                      <div className="text-sm font-black text-amber-300">{size}</div>
-                      <div className="text-[10px] text-stone-400 mt-0.5">{formatCurrency(price)}</div>
+                      <div className="text-base font-black text-amber-300">{size}</div>
+                      <div className="text-[11px] font-bold text-white mt-0.5">{formatCurrency(price)}</div>
+                      <div className="text-[10px] text-stone-400 mt-0.5">
+                        {size === '30L' ? 'aprox. 85 copos' : 'aprox. 145 copos'}
+                      </div>
                     </button>
                   );
                 })}
@@ -206,7 +199,7 @@ export const OrderSimulator: React.FC<OrderSimulatorProps> = ({
                 <div className="flex-1 text-center font-black text-xl text-white">
                   {order.quantity} {order.quantity === 1 ? 'barril' : 'barris'}
                   <span className="block text-[11px] font-normal text-amber-400">
-                    Total: {order.kegSize === 'Growler' ? order.quantity * 2 : parseInt(order.kegSize) * order.quantity} Litros
+                    Total: {parseInt(order.kegSize) * order.quantity} Litros
                   </span>
                 </div>
                 <button

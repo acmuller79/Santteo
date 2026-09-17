@@ -91,7 +91,7 @@ export const BusinessInfo: React.FC<BusinessInfoProps> = ({
             <div className="flex items-center justify-between text-[11px] text-stone-400 mb-1">
               <span>Chave PIX ({config.pixKeyType}):</span>
             </div>
-            <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center justify-between gap-2 mb-1.5">
               <code className="text-xs font-mono text-emerald-400 font-bold truncate">
                 {config.pixKey}
               </code>
@@ -113,6 +113,10 @@ export const BusinessInfo: React.FC<BusinessInfoProps> = ({
                   </>
                 )}
               </button>
+            </div>
+            <div className="text-[11px] text-stone-400 pt-1.5 border-t border-stone-800/80 flex items-center gap-1">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+              <span>Titular: <strong className="text-stone-200">{config.pixName || 'Renan da Silva Rocha'}</strong></span>
             </div>
           </div>
         </div>
@@ -184,7 +188,7 @@ export const BusinessInfo: React.FC<BusinessInfoProps> = ({
             <div className="space-y-2 text-xs text-stone-300 mb-6">
               <p className="flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Titular: <strong>{config.name}</strong></span>
+                <span>Titular: <strong>{config.pixName || 'Renan da Silva Rocha'}</strong></span>
               </p>
               <p className="flex items-center gap-2">
                 <CreditCard className="w-4 h-4 text-amber-400 shrink-0" />
