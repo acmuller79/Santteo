@@ -1,5 +1,5 @@
 import { BeerProduct, DistributorConfig, QuickAction, TrustBadge, FAQItem } from '../types';
-import santteoLogo from '../assets/images/santteo_shield_logo.jpg';
+import { SANTTEO_SHIELD_BASE64 } from './logoBase64';
 
 export const DEFAULT_TRUST_BADGES: TrustBadge[] = [
   {
@@ -60,7 +60,7 @@ export const DEFAULT_CONFIG: DistributorConfig = {
   name: 'Santtêo',
   tagline: 'Distribuição & Fornecimento de Chopp',
   slogan: 'Barris de 30L e 50L • Chopeiras Elétricas • Balneário Camboriú e Região',
-  logoUrl: '/santteo_shield_logo.jpg?v=2',
+  logoUrl: SANTTEO_SHIELD_BASE64,
   primaryPhone: '5547997538325',
   supportPhone: '5547997538325',
   whatsappWelcomeMessage: 'Olá! Gostaria de fazer um pedido de chopp Santtêo para entrega em Balneário Camboriú e Região.',
