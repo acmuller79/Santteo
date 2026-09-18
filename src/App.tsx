@@ -30,37 +30,21 @@ export default function App() {
   // Initialize with updated Santtêo Balneário Camboriú configuration
   const [config, setConfig] = useState<DistributorConfig>(() => {
     try {
-      // Clear out outdated config cache to guarantee user's explicit values
+      // Clear out outdated config cache and old saved logos so new image is always used
       localStorage.removeItem('chopp_distributor_config');
-      const savedLogo = localStorage.getItem('santteo_official_logo');
-      if (savedLogo) {
-        return { ...DEFAULT_CONFIG, logoUrl: savedLogo };
-      }
+      localStorage.removeItem('santteo_official_logo');
     } catch (e) {
       console.warn('LocalStorage error:', e);
     }
     return DEFAULT_CONFIG;
   });
 
-  // Automatically sync local uploaded logo to server so all visitors/clients see it permanently
   useEffect(() => {
     try {
-      const savedLogo = localStorage.getItem('santteo_official_logo');
-      if (savedLogo && savedLogo.startsWith('data:image')) {
-        fetch('/api/save-logo', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ image: savedLogo }),
-        })
-          .then((res) => {
-            if (res.ok) {
-              console.log('Logo successfully persisted to server for all clients');
-            }
-          })
-          .catch((err) => console.warn('Could not sync logo to server:', err));
-      }
+      localStorage.removeItem('santteo_official_logo');
+      localStorage.removeItem('chopp_distributor_config');
     } catch (e) {
-      console.warn('LocalStorage access error:', e);
+      console.warn('LocalStorage cleanup:', e);
     }
   }, []);
 

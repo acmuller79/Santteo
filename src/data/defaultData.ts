@@ -60,7 +60,7 @@ export const DEFAULT_CONFIG: DistributorConfig = {
   name: 'Santtêo',
   tagline: 'Distribuição & Fornecimento de Chopp',
   slogan: 'Barris de 30L e 50L • Chopeiras Elétricas • Balneário Camboriú e Região',
-  logoUrl: santteoLogo,
+  logoUrl: '/santteo_shield_logo.jpg?v=2',
   primaryPhone: '5547997538325',
   supportPhone: '5547997538325',
   whatsappWelcomeMessage: 'Olá! Gostaria de fazer um pedido de chopp Santtêo para entrega em Balneário Camboriú e Região.',
