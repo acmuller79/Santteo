@@ -68,7 +68,6 @@ export const OrderSimulator: React.FC<OrderSimulatorProps> = ({
 
   let totalEstimate = basePrice * order.quantity;
   if (order.includeCups) totalEstimate += 15 * order.quantity;
-  if (order.includeIce && order.tapType === 'gelo') totalEstimate += 20;
 
   const handleSendToWhatsApp = (e: React.FormEvent) => {
     e.preventDefault();
@@ -219,32 +218,21 @@ export const OrderSimulator: React.FC<OrderSimulatorProps> = ({
               <span>3. Chopeira & Equipamento</span>
               <span className="text-[11px] text-emerald-400 font-semibold">✨ Inclusa Grátis nos Barris</span>
             </label>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-              {[
-                { id: 'eletrica-220v', title: 'Chopeira Elétrica 220V', sub: 'Mais potente, gela rápido' },
-                { id: 'eletrica-110v', title: 'Chopeira Elétrica 110V', sub: 'Prática para tomadas padrão' },
-                { id: 'gelo', title: 'Chopeira a Gelo', sub: 'Ideal onde não há tomada' },
-              ].map((tap) => {
-                const isSelected = order.tapType === tap.id;
-                return (
-                  <button
-                    key={tap.id}
-                    type="button"
-                    onClick={() => setOrder({ ...order, tapType: tap.id as any })}
-                    className={`p-3 rounded-2xl border text-left transition-all ${
-                      isSelected
-                        ? 'bg-amber-500/15 border-amber-500 text-white ring-1 ring-amber-500'
-                        : 'bg-stone-950/60 border-stone-800 hover:border-stone-700 text-stone-400'
-                    }`}
-                  >
-                    <div className="flex items-center gap-1.5">
-                      <CheckCircle2 className={`w-4 h-4 ${isSelected ? 'text-amber-400' : 'text-stone-600'}`} />
-                      <span className="font-bold text-xs text-white">{tap.title}</span>
-                    </div>
-                    <p className="text-[10px] text-stone-400 mt-1 pl-5.5">{tap.sub}</p>
-                  </button>
-                );
-              })}
+            <div className="p-3.5 rounded-2xl border bg-amber-500/15 border-amber-500/50 text-white ring-1 ring-amber-500/40 flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <CheckCircle2 className="w-5 h-5 text-amber-400 shrink-0" />
+                <div>
+                  <div className="font-bold text-sm text-white flex items-center gap-2">
+                    Chopeira Elétrica 220V Profissional
+                    <span className="bg-amber-400/20 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-amber-400/30">
+                      Padrão
+                    </span>
+                  </div>
+                  <p className="text-xs text-stone-300 mt-0.5">
+                    Mais potente, gela super rápido direto na torneira com cilindro de CO2 regulado
+                  </p>
+                </div>
+              </div>
             </div>
 
             {/* Extras Checkboxes */}
@@ -258,18 +246,6 @@ export const OrderSimulator: React.FC<OrderSimulatorProps> = ({
                 />
                 <span>Incluir pacote de 50 copos descartáveis 400ml (+R$ 15)</span>
               </label>
-
-              {order.tapType === 'gelo' && (
-                <label className="flex items-center gap-2 text-xs text-stone-300 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={order.includeIce}
-                    onChange={(e) => setOrder({ ...order, includeIce: e.target.checked })}
-                    className="rounded border-stone-700 text-amber-500 focus:ring-amber-500 bg-stone-950 w-4 h-4"
-                  />
-                  <span>Incluir saco de gelo para chopeira (+R$ 20)</span>
-                </label>
-              )}
             </div>
           </div>
 
@@ -302,7 +278,7 @@ export const OrderSimulator: React.FC<OrderSimulatorProps> = ({
                   <input
                     type="tel"
                     required
-                    placeholder="Ex: (11) 99999-8888"
+                    placeholder="Ex: (47) 99999-8888"
                     value={order.customerPhone}
                     onChange={(e) => setOrder({ ...order, customerPhone: e.target.value })}
                     className="w-full bg-stone-950 border border-stone-800 rounded-xl pl-9 pr-3 py-2 text-sm text-white placeholder-stone-600 focus:outline-none focus:border-amber-500"
@@ -311,66 +287,34 @@ export const OrderSimulator: React.FC<OrderSimulatorProps> = ({
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label className="block text-xs text-stone-400 mb-1">Data do Evento</label>
-                <div className="relative">
-                  <Calendar className="w-4 h-4 text-stone-500 absolute left-3 top-3" />
-                  <input
-                    type="date"
-                    required
-                    value={order.eventDate}
-                    onChange={(e) => setOrder({ ...order, eventDate: e.target.value })}
-                    className="w-full bg-stone-950 border border-stone-800 rounded-xl pl-9 pr-3 py-2 text-sm text-white placeholder-stone-600 focus:outline-none focus:border-amber-500"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs text-stone-400 mb-1">Modalidade</label>
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setOrder({ ...order, deliveryType: 'entrega' })}
-                    className={`py-2 px-3 rounded-xl border text-xs font-semibold transition-all ${
-                      order.deliveryType === 'entrega'
-                        ? 'bg-amber-500/20 border-amber-500 text-amber-300'
-                        : 'bg-stone-950 border-stone-800 text-stone-400'
-                    }`}
-                  >
-                    🚚 Entrega no Local
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setOrder({ ...order, deliveryType: 'retirada' })}
-                    className={`py-2 px-3 rounded-xl border text-xs font-semibold transition-all ${
-                      order.deliveryType === 'retirada'
-                        ? 'bg-amber-500/20 border-amber-500 text-amber-300'
-                        : 'bg-stone-950 border-stone-800 text-stone-400'
-                    }`}
-                  >
-                    🏢 Retirar no Balcão
-                  </button>
-                </div>
+            <div>
+              <label className="block text-xs text-stone-400 mb-1">Data do Evento</label>
+              <div className="relative">
+                <Calendar className="w-4 h-4 text-stone-500 absolute left-3 top-3" />
+                <input
+                  type="date"
+                  required
+                  value={order.eventDate}
+                  onChange={(e) => setOrder({ ...order, eventDate: e.target.value })}
+                  className="w-full bg-stone-950 border border-stone-800 rounded-xl pl-9 pr-3 py-2 text-sm text-white placeholder-stone-600 focus:outline-none focus:border-amber-500"
+                />
               </div>
             </div>
 
-            {order.deliveryType === 'entrega' && (
-              <div>
-                <label className="block text-xs text-stone-400 mb-1">Endereço de Entrega (Rua, Número, Bairro)</label>
-                <div className="relative">
-                  <MapPin className="w-4 h-4 text-stone-500 absolute left-3 top-3" />
-                  <input
-                    type="text"
-                    required
-                    placeholder="Ex: Rua das Flores, 120 - Bairro Jardim"
-                    value={order.deliveryAddress}
-                    onChange={(e) => setOrder({ ...order, deliveryAddress: e.target.value })}
-                    className="w-full bg-stone-950 border border-stone-800 rounded-xl pl-9 pr-3 py-2 text-sm text-white placeholder-stone-600 focus:outline-none focus:border-amber-500"
-                  />
-                </div>
+            <div>
+              <label className="block text-xs text-stone-400 mb-1">Endereço de Entrega (Rua, Número, Bairro)</label>
+              <div className="relative">
+                <MapPin className="w-4 h-4 text-stone-500 absolute left-3 top-3" />
+                <input
+                  type="text"
+                  required
+                  placeholder="Ex: Rua das Flores, 120 - Balneário Camboriú"
+                  value={order.deliveryAddress}
+                  onChange={(e) => setOrder({ ...order, deliveryAddress: e.target.value })}
+                  className="w-full bg-stone-950 border border-stone-800 rounded-xl pl-9 pr-3 py-2 text-sm text-white placeholder-stone-600 focus:outline-none focus:border-amber-500"
+                />
               </div>
-            )}
+            </div>
 
             <div>
               <label className="block text-xs text-stone-400 mb-1">Observações ou Dúvidas (Opcional)</label>

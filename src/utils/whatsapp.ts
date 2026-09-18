@@ -55,9 +55,7 @@ export function generateOrderWhatsAppMessage(
   estimatedTotal: number
 ): string {
   const tapNames: Record<string, string> = {
-    'eletrica-220v': 'Chopeira Elétrica (220V)',
-    'eletrica-110v': 'Chopeira Elétrica (110V)',
-    'gelo': 'Chopeira a Gelo com Serpentina',
+    'eletrica-220v': 'Chopeira Elétrica Profissional 220V (Inclusa)',
     'nenhuma': 'Não preciso de chopeira (já possuo)',
   };
 
@@ -73,17 +71,14 @@ export function generateOrderWhatsAppMessage(
     `• Quantidade de barris: *${order.quantity} un.*`,
     ``,
     `🔌 *EQUIPAMENTO & ACESSÓRIOS:*`,
-    `• Chopeira: ${tapNames[order.tapType] || order.tapType}`,
+    `• Chopeira: ${tapNames[order.tapType] || 'Chopeira Elétrica 220V'}`,
     order.includeCups ? `• Incluir Copos descartáveis 400ml: Sim` : ``,
-    order.includeIce ? `• Incluir Saco de Gelo (para chopeira a gelo): Sim` : ``,
     ``,
     `📅 *DATA & LOCAL DO EVENTO:*`,
     `• Data do Evento: *${order.eventDate || 'A combinar'}*`,
     order.eventTime ? `• Horário previsto: ${order.eventTime}` : ``,
-    `• Modalidade: *${order.deliveryType === 'entrega' ? '🚚 Entrega e Instalação no local' : '🏢 Retirada no Balcão'}*`,
-    order.deliveryType === 'entrega' && order.deliveryAddress
-      ? `• Endereço: ${order.deliveryAddress}`
-      : ``,
+    `• Modalidade: *🚚 Entrega e Instalação no Local*`,
+    order.deliveryAddress ? `• Endereço: ${order.deliveryAddress}` : ``,
     order.notes ? `• Observações: ${order.notes}` : ``,
     `--------------------------------------`,
     `💰 *VALOR ESTIMADO DO PEDIDO:* *${formatCurrency(estimatedTotal)}*`,

@@ -91,15 +91,15 @@ export interface OrderState {
   beerId: string;
   kegSize: '20L' | '30L' | '50L' | 'Growler';
   quantity: number;
-  tapType: 'eletrica-220v' | 'eletrica-110v' | 'gelo' | 'nenhuma';
+  tapType: 'eletrica-220v' | 'nenhuma';
   eventDate: string;
   eventTime: string;
-  deliveryType: 'entrega' | 'retirada';
+  deliveryType: 'entrega';
   customerName: string;
   customerPhone: string;
   deliveryAddress: string;
   notes: string;
   includeCups: boolean;
-  includeIce: boolean;
+  includeIce?: boolean;
 }
 
